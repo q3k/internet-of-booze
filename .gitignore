@@ -1,0 +1,10 @@
+*.o
+*swp
+*.elf
+*.bin
+
+# Waste of space
+FreeRTOS/portable
+
+# We cannot distribute this due to licensing issues.
+STM32F10x_StdPeriph_Lib_V3.5.0
