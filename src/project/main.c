@@ -14,11 +14,11 @@
 #include "stm32f10x_it.h"
 
 /* Task priorities. */
-#define mainECHO_TASK_PRIORITY				( tskIDLE_PRIORITY + 1 )
+#define mainECHO_TASK_PRIORITY                ( tskIDLE_PRIORITY + 1 )
 
 /* COM port and baud rate used by the echo task. */
-#define mainCOM0							( 0 )
-#define mainBAUD_RATE						( 115200 )
+#define mainCOM0                            ( 0 )
+#define mainBAUD_RATE                        ( 115200 )
 
 static void prvUSARTEchoTask( void *pvParameters );
 static void prvSetupHardware(void);
@@ -27,17 +27,17 @@ static void prvSetupHardware(void);
 
 int main( void )
 {
-	prvSetupHardware();
+    prvSetupHardware();
 
-	/* Create the 'echo' task, which is also defined within this file. */
-	xTaskCreate( prvUSARTEchoTask, ( signed char * ) "Echo", configMINIMAL_STACK_SIZE, NULL, mainECHO_TASK_PRIORITY, NULL );
+    /* Create the 'echo' task, which is also defined within this file. */
+    xTaskCreate( prvUSARTEchoTask, ( signed char * ) "Echo", configMINIMAL_STACK_SIZE, NULL, mainECHO_TASK_PRIORITY, NULL );
 
-	/* Start the scheduler. */
-	vTaskStartScheduler();
+    /* Start the scheduler. */
+    vTaskStartScheduler();
 
     /* Will only get here if there was insufficient memory to create the idle
     task.  The idle task is created within vTaskStartScheduler(). */
-	for( ;; );
+    for( ;; );
 }
 /*-----------------------------------------------------------*/
 
@@ -72,23 +72,23 @@ static void prvSetupHardware( void )
 
 void vApplicationStackOverflowHook( xTaskHandle pxTask, signed char *pcTaskName )
 {
-	/* This function will get called if a task overflows its stack.   If the
-	parameters are corrupt then inspect pxCurrentTCB to find which was the
-	offending task. */
+    /* This function will get called if a task overflows its stack.   If the
+    parameters are corrupt then inspect pxCurrentTCB to find which was the
+    offending task. */
 
-	( void ) pxTask;
-	( void ) pcTaskName;
+    ( void ) pxTask;
+    ( void ) pcTaskName;
 
-	for( ;; );
+    for( ;; );
 }
 /*-----------------------------------------------------------*/
 
 void assert_failed( unsigned char *pucFile, unsigned long ulLine )
 {
-	( void ) pucFile;
-	( void ) ulLine;
+    ( void ) pucFile;
+    ( void ) ulLine;
 
-	for( ;; );
+    for( ;; );
 }
 
 void vApplicationIdleHook(void)
