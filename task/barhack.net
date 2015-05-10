@@ -1,7 +1,7 @@
 (export (version D)
   (design
-    (source /home/q3k/barhack/barhack.sch)
-    (date "Sun 10 May 2015 11:48:21 PM CEST")
+    (source /home/q3k/barhack/task/barhack.sch)
+    (date "Mon 11 May 2015 12:02:17 AM CEST")
     (tool "Eeschema (2015-05-09 BZR 5648)-product")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -212,7 +212,6 @@
       (tstamp 555029D4))
     (comp (ref U3)
       (value STM32F103C8)
-      (footprint LQFP48)
       (libsource (lib stm32) (part STM32F103C8))
       (sheetpath (names /) (tstamps /))
       (tstamp 55507679))
@@ -442,61 +441,6 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 55553411)))
   (libparts
-    (libpart (lib w_connectors) (part dc_jack)
-      (description "DC power jack")
-      (fields
-        (field (name Reference) J)
-        (field (name Value) dc_jack))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))
-        (pin (num 3) (name 3) (type passive))))
-    (libpart (lib w_device) (part R)
-      (description Resistance)
-      (fields
-        (field (name Reference) R)
-        (field (name Value) R))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib w_device) (part LED)
-      (description "Diode LED (emitter)")
-      (fields
-        (field (name Reference) LD)
-        (field (name Value) LED))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib w_device) (part CRYSTAL)
-      (fields
-        (field (name Reference) X)
-        (field (name Value) CRYSTAL))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))))
-    (libpart (lib w_connectors) (part HEADER_4)
-      (fields
-        (field (name Reference) J)
-        (field (name Value) HEADER_4))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))
-        (pin (num 3) (name ~) (type passive))
-        (pin (num 4) (name ~) (type passive))))
-    (libpart (lib w_connectors) (part HEADER_9)
-      (fields
-        (field (name Reference) J)
-        (field (name Value) HEADER_9))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))
-        (pin (num 3) (name ~) (type passive))
-        (pin (num 4) (name ~) (type passive))
-        (pin (num 5) (name ~) (type passive))
-        (pin (num 6) (name ~) (type passive))
-        (pin (num 7) (name ~) (type passive))
-        (pin (num 8) (name ~) (type passive))
-        (pin (num 9) (name ~) (type passive))))
     (libpart (lib w_transistor) (part FET_N_GSD)
       (description "N channel JFET, GSD footprint")
       (fields
@@ -516,16 +460,6 @@
         (pin (num 1) (name B) (type input))
         (pin (num 2) (name E) (type passive))
         (pin (num 3) (name C) (type passive))))
-    (libpart (lib mic29302) (part MIC29302)
-      (fields
-        (field (name Reference) U)
-        (field (name Value) MIC29302))
-      (pins
-        (pin (num 1) (name PWR_CTL) (type input))
-        (pin (num 2) (name VIN) (type power_in))
-        (pin (num 3) (name GND) (type power_in))
-        (pin (num 4) (name VOUT) (type power_out))
-        (pin (num 5) (name FB) (type input))))
     (libpart (lib rfcom) (part SIM900)
       (description "SIM900, GSM Quad-Band Communication Module, GPRS, Audio Engine, AT Command Set")
       (docs "http://www.simcom.us/act_admin/supportfile/SIM900_HD_V1.01(091226).pdf")
@@ -601,62 +535,16 @@
         (pin (num 66) (name STATUS) (type passive))
         (pin (num 67) (name GPIO11) (type BiDi))
         (pin (num 68) (name GPIO12) (type BiDi))))
-    (libpart (lib w_device) (part C)
-      (aliases
-        (alias cap_np))
-      (description "Capacitor non pol")
+    (libpart (lib mic29302) (part MIC29302)
       (fields
-        (field (name Reference) C)
-        (field (name Value) C))
+        (field (name Reference) U)
+        (field (name Value) MIC29302))
       (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib w_device) (part FUSE)
-      (description "Fuse, generic")
-      (fields
-        (field (name Reference) F)
-        (field (name Value) FUSE))
-      (pins
-        (pin (num 1) (name ~) (type input))
-        (pin (num 2) (name ~) (type input))))
-    (libpart (lib w_connectors) (part HEADER_5x2)
-      (fields
-        (field (name Reference) J)
-        (field (name Value) HEADER_5x2))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))
-        (pin (num 3) (name ~) (type passive))
-        (pin (num 4) (name ~) (type passive))
-        (pin (num 5) (name ~) (type passive))
-        (pin (num 6) (name ~) (type passive))
-        (pin (num 7) (name ~) (type passive))
-        (pin (num 8) (name ~) (type passive))
-        (pin (num 9) (name ~) (type passive))
-        (pin (num 10) (name ~) (type passive))))
-    (libpart (lib w_device) (part SW_PUSH)
-      (description "Push Button")
-      (fields
-        (field (name Reference) SW)
-        (field (name Value) SW_PUSH))
-      (pins
-        (pin (num 1) (name 1) (type passive))
-        (pin (num 2) (name 2) (type passive))))
-    (libpart (lib w_device) (part cap)
-      (fields
-        (field (name Reference) C)
-        (field (name Value) cap))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib w_connectors) (part HEADER_3)
-      (fields
-        (field (name Reference) J)
-        (field (name Value) HEADER_3))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))
-        (pin (num 3) (name ~) (type passive))))
+        (pin (num 1) (name PWR_CTL) (type input))
+        (pin (num 2) (name VIN) (type power_in))
+        (pin (num 3) (name GND) (type power_in))
+        (pin (num 4) (name VOUT) (type power_out))
+        (pin (num 5) (name FB) (type input))))
     (libpart (lib simholder) (part SIMHOLDER)
       (fields
         (field (name Reference) J)
@@ -726,20 +614,14 @@
         (pin (num 46) (name PB9/TIM4_CH4) (type BiDi))
         (pin (num 47) (name VSS) (type power_in))
         (pin (num 48) (name VDD) (type power_in))))
-    (libpart (lib w_analog) (part LM1117-SOT)
-      (description "800mA Low Dropout Linear Regulator, SOT packages")
-      (docs /home/walter/Documenti/Elettronica/DATA_SHEET/Elettronici/Integrati/Analogici/Regolatori/TI_LM1117.pdf)
-      (footprints
-        (fp d2-pak)
-        (fp sot223)
-        (fp d-pak))
+    (libpart (lib w_device) (part SW_PUSH)
+      (description "Push Button")
       (fields
-        (field (name Reference) U)
-        (field (name Value) LM1117-SOT))
+        (field (name Reference) SW)
+        (field (name Value) SW_PUSH))
       (pins
-        (pin (num 1) (name ADJ/GND) (type input))
-        (pin (num 2) (name VOUT) (type input))
-        (pin (num 3) (name VIN) (type input))))
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
     (libpart (lib w_connectors) (part HEADER_8)
       (fields
         (field (name Reference) J)
@@ -753,6 +635,23 @@
         (pin (num 6) (name ~) (type passive))
         (pin (num 7) (name ~) (type passive))
         (pin (num 8) (name ~) (type passive))))
+    (libpart (lib w_device) (part C)
+      (aliases
+        (alias cap_np))
+      (description "Capacitor non pol")
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib w_device) (part CRYSTAL)
+      (fields
+        (field (name Reference) X)
+        (field (name Value) CRYSTAL))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
     (libpart (lib w_connectors) (part HEADER_8x2)
       (fields
         (field (name Reference) J)
@@ -773,24 +672,124 @@
         (pin (num 13) (name ~) (type passive))
         (pin (num 14) (name ~) (type passive))
         (pin (num 15) (name ~) (type passive))
-        (pin (num 16) (name ~) (type passive)))))
+        (pin (num 16) (name ~) (type passive))))
+    (libpart (lib w_connectors) (part HEADER_9)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) HEADER_9))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))
+        (pin (num 4) (name ~) (type passive))
+        (pin (num 5) (name ~) (type passive))
+        (pin (num 6) (name ~) (type passive))
+        (pin (num 7) (name ~) (type passive))
+        (pin (num 8) (name ~) (type passive))
+        (pin (num 9) (name ~) (type passive))))
+    (libpart (lib w_device) (part FUSE)
+      (description "Fuse, generic")
+      (fields
+        (field (name Reference) F)
+        (field (name Value) FUSE))
+      (pins
+        (pin (num 1) (name ~) (type input))
+        (pin (num 2) (name ~) (type input))))
+    (libpart (lib w_device) (part LED)
+      (description "Diode LED (emitter)")
+      (fields
+        (field (name Reference) LD)
+        (field (name Value) LED))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib w_device) (part cap)
+      (fields
+        (field (name Reference) C)
+        (field (name Value) cap))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib w_device) (part R)
+      (description Resistance)
+      (fields
+        (field (name Reference) R)
+        (field (name Value) R))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib w_connectors) (part dc_jack)
+      (description "DC power jack")
+      (fields
+        (field (name Reference) J)
+        (field (name Value) dc_jack))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))
+        (pin (num 3) (name 3) (type passive))))
+    (libpart (lib w_analog) (part LM1117-SOT)
+      (description "800mA Low Dropout Linear Regulator, SOT packages")
+      (docs /home/walter/Documenti/Elettronica/DATA_SHEET/Elettronici/Integrati/Analogici/Regolatori/TI_LM1117.pdf)
+      (footprints
+        (fp d2-pak)
+        (fp sot223)
+        (fp d-pak))
+      (fields
+        (field (name Reference) U)
+        (field (name Value) LM1117-SOT))
+      (pins
+        (pin (num 1) (name ADJ/GND) (type input))
+        (pin (num 2) (name VOUT) (type input))
+        (pin (num 3) (name VIN) (type input))))
+    (libpart (lib w_connectors) (part HEADER_3)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) HEADER_3))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))))
+    (libpart (lib w_connectors) (part HEADER_4)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) HEADER_4))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))
+        (pin (num 4) (name ~) (type passive))))
+    (libpart (lib w_connectors) (part HEADER_5x2)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) HEADER_5x2))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))
+        (pin (num 4) (name ~) (type passive))
+        (pin (num 5) (name ~) (type passive))
+        (pin (num 6) (name ~) (type passive))
+        (pin (num 7) (name ~) (type passive))
+        (pin (num 8) (name ~) (type passive))
+        (pin (num 9) (name ~) (type passive))
+        (pin (num 10) (name ~) (type passive)))))
   (libraries
-    (library (logical simholder)
-      (uri /home/q3k/simholder.lib))
-    (library (logical stm32)
-      (uri /home/q3k/KicadStock/library/stm32.lib))
-    (library (logical mic29302)
-      (uri /home/q3k/mic29302.lib))
-    (library (logical w_analog)
-      (uri /home/q3k/KicadParts/library/w_analog.lib))
+    (library (logical w_connectors)
+      (uri /home/q3k/KicadParts/library/w_connectors.lib))
     (library (logical w_transistor)
       (uri /home/q3k/KicadParts/library/w_transistor.lib))
     (library (logical rfcom)
       (uri /home/q3k/KicadStock/library/rfcom.lib))
-    (library (logical w_connectors)
-      (uri /home/q3k/KicadParts/library/w_connectors.lib))
+    (library (logical simholder)
+      (uri simholder.lib))
+    (library (logical mic29302)
+      (uri mic29302.lib))
+    (library (logical stm32)
+      (uri /home/q3k/KicadStock/library/stm32.lib))
     (library (logical w_device)
-      (uri /home/q3k/KicadParts/library/w_device.lib)))
+      (uri /home/q3k/KicadParts/library/w_device.lib))
+    (library (logical w_analog)
+      (uri /home/q3k/KicadParts/library/w_analog.lib)))
   (nets
     (net (code 1) (name "Net-(LD5-Pad2)")
       (node (ref R16) (pin 2))
