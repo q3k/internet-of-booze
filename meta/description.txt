@@ -1,0 +1,3 @@
+Task description ...
+IP: {{ip_address("task_name")}}
+[Download file]({{resource("libc.so.6")}})
