@@ -1,4 +1,4 @@
-update=Sun 10 May 2015 10:29:09 PM CEST
+update=Mon 11 May 2015 07:28:15 PM 
 version=1
 last_client=kicad
 [pcbnew]
@@ -42,6 +42,6 @@ LibName10=/home/q3k/KicadParts/library/w_rtx
 LibName11=/home/q3k/KicadParts/library/w_transistor
 LibName12=/home/q3k/KicadParts/library/w_vacuum
 LibName13=/home/q3k/KicadStock/library/rfcom
-LibName14=mic29302
-LibName15=simholder
-LibName16=/home/q3k/KicadStock/library/stm32
+LibName14=/home/q3k/KicadStock/library/stm32
+LibName15=library/mic29302
+LibName16=library/simholder
