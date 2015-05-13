@@ -12,7 +12,7 @@ OD=arm-none-eabi-objdump
 
 BIN=$(CP) -O ihex 
 
-DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F10X_LD_VL -DHSE_VALUE=8000000
+DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE=8000000
 
 MCU = cortex-m4
 MCFLAGS = -mcpu=$(MCU) -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork
@@ -27,7 +27,7 @@ AFLAGS	= $(MCFLAGS)
 $(TARGET): $(EXECUTABLE)
 	$(CP) -O binary $^ $@
 
-OBJS = src/stm32f10x_it.o src/startup_stm32f10x_ld_vl.o \
+OBJS = src/stm32f10x_it.o src/startup_stm32f10x_md.o \
 	src/project/main.o \
 	src/cmsis/core_cm3.o src/cmsis/system_stm32f10x.o \
 	src/stdperiph/misc.o src/stdperiph/stm32f10x_gpio.o src/stdperiph/stm32f10x_rcc.o \
@@ -39,7 +39,7 @@ $(EXECUTABLE): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ 
 
 flash: $(TARGET)
-	sudo openocd -f ~/Embedded/busblaster.cfg -f /usr/share/openocd/scripts/target/stm32f1x.cfg -c "init" -c "reset halt" -c "flash write_image erase main.bin 0x08000000" -c "reset" -c "exit" || true
+	sudo openocd -f swd.cfg -f /usr/share/openocd/scripts/target/stm32f1x.cfg -c "init" -c "reset halt" -c "flash write_image erase main.bin 0x08000000" -c "reset" -c "exit" || true
 	#sudo openocd -f ~/Embedded/busblaster.cfg -f /usr/share/openocd/scripts/target/stm32f1x.cfg -c "init" -c "reset halt" -c "mt_flash main.elf" -c "reset" -c "exit" || true
 
 clean:
