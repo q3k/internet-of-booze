@@ -10,23 +10,40 @@
 #include <stm32f10x_it.h>
 #include <misc.h>
 
-#define BLINK_TASK_PRIORITY                ( tskIDLE_PRIORITY + 1 )
+#include "setup.h"
+#include "modem.h"
 
-static void BlinkTask(void *Parameters);
-static void SetupHardware(void);
+#define BLINK_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+#define MODEM_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
+
+#define MODEM_QUEUE_SIZE 256
+
+static void prvBlinkTask(void *Parameter);
 
 int main(void)
 {
-    SetupHardware();
+    vSetupHardware();
 
-    xTaskCreate(BlinkTask, "blnk", configMINIMAL_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
+    /// Create queues
+    // Queue from USART receive ISR to ModemCommunicationTask
+    xModemReceiveQueue = xQueueCreate(MODEM_QUEUE_SIZE, sizeof(char));
+    // Queue from ModemCommunicationTask to USART TXE interrupt
+    xModemTransmitQueue = xQueueCreate(MODEM_QUEUE_SIZE, sizeof(char));
+
+    /// Create tasks
+    // Blinky task!
+    xTaskCreate(prvBlinkTask, (const signed char*)"blnk", configMINIMAL_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
+    // Modem communication task
+    xTaskCreate(xModemCommunicationTask, (const signed char*)"mdmc", configMINIMAL_STACK_SIZE, NULL, MODEM_TASK_PRIORITY, NULL);
 
     vTaskStartScheduler();
     for( ;; );
 }
 
-static void BlinkTask(void *Parameters)
+static void prvBlinkTask(void *Parameter)
 {
+    (void) Parameter;
+
     for (;;)
     {
         GPIO_SetBits(GPIOB, GPIO_Pin_0);
@@ -34,20 +51,6 @@ static void BlinkTask(void *Parameters)
         GPIO_ResetBits(GPIOB, GPIO_Pin_0);
         vTaskDelay(1000);
     }
-}
-
-GPIO_InitTypeDef GPIO_InitStructure;
-static void SetupHardware(void)
-{
-    // For FreeRTOS interrupt priority
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-
-    // Status LED GPIO (PB0)
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
