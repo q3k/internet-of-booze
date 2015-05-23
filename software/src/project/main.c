@@ -12,8 +12,10 @@
 
 #include "setup.h"
 #include "modem.h"
+#include "io.h"
+#include "debug.h"
 
-#define BLINK_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+#define BLINK_TASK_PRIORITY (tskIDLE_PRIORITY + 3)
 #define MODEM_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 
 #define MODEM_QUEUE_SIZE 256
@@ -32,9 +34,9 @@ int main(void)
 
     /// Create tasks
     // Blinky task!
-    xTaskCreate(prvBlinkTask, (const signed char*)"blnk", configMINIMAL_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
+    xTaskCreate(prvBlinkTask, (const signed char*)"blnk", 128, NULL, BLINK_TASK_PRIORITY, NULL);
     // Modem communication task
-    xTaskCreate(xModemCommunicationTask, (const signed char*)"mdmc", configMINIMAL_STACK_SIZE, NULL, MODEM_TASK_PRIORITY, NULL);
+    xTaskCreate(xModemCommunicationTask, (const signed char*)"mdmc", 256, NULL, MODEM_TASK_PRIORITY, NULL);
 
     vTaskStartScheduler();
     for( ;; );
@@ -44,11 +46,15 @@ static void prvBlinkTask(void *Parameter)
 {
     (void) Parameter;
 
+    vDebugSpewString("[blnk] Task started.\r\n");
     for (;;)
     {
-        GPIO_SetBits(GPIOB, GPIO_Pin_0);
+        GPIO_SetBits(IO_MOTOR1_PORT, GPIO_Pin_8);
+        GPIO_ResetBits(IO_MOTOR1_PORT, GPIO_Pin_9);
         vTaskDelay(1000);
-        GPIO_ResetBits(GPIOB, GPIO_Pin_0);
+
+        GPIO_SetBits(IO_MOTOR1_PORT, GPIO_Pin_9);
+        GPIO_ResetBits(IO_MOTOR1_PORT, GPIO_Pin_8);
         vTaskDelay(1000);
     }
 }
