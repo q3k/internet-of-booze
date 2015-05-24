@@ -14,11 +14,13 @@
 #include "modem.h"
 #include "io.h"
 #include "debug.h"
+#include "acceptor.h"
 
 #define BLINK_TASK_PRIORITY (tskIDLE_PRIORITY + 3)
 #define MODEM_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
+#define ACCEPTOR_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
 
-#define MODEM_QUEUE_SIZE 256
+#define MODEM_QUEUE_SIZE 64
 
 static void prvBlinkTask(void *Parameter);
 
@@ -38,6 +40,9 @@ int main(void)
     // Modem communication task
     xTaskCreate(xModemCommunicationTask, (const signed char*)"mdmc", 256, NULL, MODEM_TASK_PRIORITY, NULL);
 
+    // Acceptor task
+    xTaskCreate(xAcceptorCommunicationTask, (const signed char*)"acpt", 128, NULL, ACCEPTOR_TASK_PRIORITY, NULL);
+
     vTaskStartScheduler();
     for( ;; );
 }
@@ -49,12 +54,10 @@ static void prvBlinkTask(void *Parameter)
     vDebugSpewString("[blnk] Task started.\r\n");
     for (;;)
     {
-        GPIO_SetBits(IO_MOTOR1_PORT, GPIO_Pin_8);
         GPIO_ResetBits(IO_MOTOR1_PORT, GPIO_Pin_9);
         vTaskDelay(1000);
 
         GPIO_SetBits(IO_MOTOR1_PORT, GPIO_Pin_9);
-        GPIO_ResetBits(IO_MOTOR1_PORT, GPIO_Pin_8);
         vTaskDelay(1000);
     }
 }

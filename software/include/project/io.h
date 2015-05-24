@@ -11,4 +11,24 @@
 #define IO_MOTOR2_RCC_CMD RCC_APB2PeriphClockCmd
 #define IO_MOTOR2_PORT GPIOB
 
+#define IO_VEND1_RCC RCC_APB2Periph_GPIOB
+#define IO_VEND1_PIN GPIO_Pin_4
+#define IO_VEND1_RCC_CMD RCC_APB2PeriphClockCmd
+#define IO_VEND1_PORT GPIOB
+
+#define IO_VEND2_RCC RCC_APB2Periph_GPIOB
+#define IO_VEND2_PIN GPIO_Pin_5
+#define IO_VEND2_RCC_CMD RCC_APB2PeriphClockCmd
+#define IO_VEND2_PORT GPIOB
+
+#define IO_VEND3_RCC RCC_APB2Periph_GPIOB
+#define IO_VEND3_PIN GPIO_Pin_6
+#define IO_VEND3_RCC_CMD RCC_APB2PeriphClockCmd
+#define IO_VEND3_PORT GPIOB
+
+#define IO_VEND4_RCC RCC_APB2Periph_GPIOB
+#define IO_VEND4_PIN GPIO_Pin_7
+#define IO_VEND4_RCC_CMD RCC_APB2PeriphClockCmd
+#define IO_VEND4_PORT GPIOB
+
 #endif

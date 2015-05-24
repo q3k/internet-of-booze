@@ -8,6 +8,7 @@
 #include <assert.h>
 
 #include "debug.h"
+#include "control.h"
 
 xQueueHandle xModemReceiveQueue;
 xQueueHandle xModemTransmitQueue;
@@ -72,7 +73,7 @@ static void prvModemReceiveUntil(char *Part, char *Result, int ResultLen)
                 *ResultOffset = Received;
                 ResultOffset++;
             }
-            PartOffset++; 
+            PartOffset++;
         }
         else
         {
@@ -142,18 +143,19 @@ static void prvIssueCommand(const char *Command)
     vDebugSpewString("\r\n");
 }
 
+char Message[160];
 static void prvParsePDU(uint8_t *PDU, uint32_t Length)
 {
-    vDebugSpewString("Parsing PDU...\r\n");
+    vDebugSpewString("[mdmc] Parsing PDU...\r\n");
     if (Length < 1)
     {
-        vDebugSpewString("Invalid length...\r\n");
+        vDebugSpewString("[mdmc] Invalid length...\r\n");
         return;
     }
     uint8_t SMSC_Length = PDU[0];
     if (Length < (1 + SMSC_Length))
     {
-        vDebugSpewString("Buffer too small...\r\n");
+        vDebugSpewString("[mdmc] Buffer too small...\r\n");
         return;
     }
 
@@ -163,20 +165,20 @@ static void prvParsePDU(uint8_t *PDU, uint32_t Length)
         return;
     if ((SMSDeliver[0] & 3) != 0)
     {
-       vDebugSpewString("Invalid message type!\r\n");
+       vDebugSpewString("[mdmc] Invalid message type!\r\n");
         return;
     }
-    vDebugSpewString("SMS Delivery message OK\r\n");
+    vDebugSpewString("[mdmc] SMS Delivery message OK\r\n");
     uint8_t AddressLength = SMSDeliver[1];
     if (SMSDeliverLength < (2 + AddressLength))
     {
-        vDebugSpewString("Buffer too small...\r\n");
+        vDebugSpewString("[mdmc] Buffer too small...\r\n");
         return;
     }
 
     if (SMSDeliver[2] != 0xC8 && SMSDeliver[2] != 0x91)
     {
-        vDebugSpewString("Unrecognized sender type address.\r\n");
+        vDebugSpewString("[mdmc] Unrecognized sender type address.\r\n");
         return;
     }
 
@@ -201,7 +203,7 @@ static void prvParsePDU(uint8_t *PDU, uint32_t Length)
         else
             *pPhoneNumber++ = '0' + (Byte & 0b1111);
     }
-    vDebugSpewString("SMS from: ");
+    vDebugSpewString("[mdmc] SMS from: ");
     vDebugSpewString(PhoneNumber);
     vDebugSpewString("\r\n");
 
@@ -212,17 +214,16 @@ static void prvParsePDU(uint8_t *PDU, uint32_t Length)
     uint32_t TPLength = Length - (TP - PDU);
     if (TPLength < 10)
     {
-        vDebugSpewString("Buffer too small...\r\n");
+        vDebugSpewString("[mdmc] Buffer too small...\r\n");
         return;
     }
     if (TP[0] != 0 || TP[1] != 0)
     {
-        vDebugSpewString("TP-PID or TP-DCS wrong...\r\n");
+        vDebugSpewString("[mdmc] TP-PID or TP-DCS wrong...\r\n");
         return;
     }
     uint8_t UserDataLength = TP[9];
     uint8_t *UserData = &TP[10];
-    char Message[160];
     char *pMessage = Message;
     uint8_t LeftInByte = 8;
     for (uint32_t i = 0; i < UserDataLength; i++)
@@ -232,10 +233,6 @@ static void prvParsePDU(uint8_t *PDU, uint32_t Length)
         {
             uint8_t Bit = (*UserData) & 1;
             *UserData >>= 1;
-            if (Bit == 1)
-                vDebugSpewString("1");
-            else
-                vDebugSpewString("0");
             LeftInByte--;
             if (LeftInByte == 0)
             {
@@ -248,9 +245,14 @@ static void prvParsePDU(uint8_t *PDU, uint32_t Length)
         *(pMessage++) = Byte;
     }
     *pMessage = 0;
-    vDebugSpewString("Message received: ");
+    vDebugSpewString("[mdmc] SMS Data: ");
     vDebugSpewString(Message);
     vDebugSpewString("\r\n");
+    if (!strncmp(Message, "CTRL", 4))
+    {
+        vDebugSpewString("[mdmc] Passing message to Control subsystem.\r\n");
+        vControlParseSMS(PhoneNumber, Message);
+    }
 }
 
 static uint8_t prvASCIIToNibble(char Ascii)
@@ -272,12 +274,12 @@ static void prvReadMessages(void)
     while (1)
     {
         prvModemReceiveUntil("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer));
-        vDebugSpewString("SMS List Line: ");
+        vDebugSpewString("[mdmc] SMS lister got line: ");
         vDebugSpewString(ReceiveBuffer);
         vDebugSpewString("\r\n");
         if (NextIsPDU)
         {
-            vDebugSpewString("PDU line!\r\n");
+            vDebugSpewString("[mdmc] PDU line, passing to parser\r\n");
             uint32_t Length = strlen(ReceiveBuffer);
             for (uint32_t i = 0; i < Length/2; i++)
             {
@@ -301,11 +303,12 @@ void prvHandleUnsolicited(const char *Line)
 {
     if (!strncmp(Line, "RING", 4))
     {
+        vDebugSpewString("[mdmc] Someone is calling us, hang up on them...\r\n");
         prvIssueCommand("ATH");
     }
     else if (!strncmp(Line, "+CMTI", 5))
     {
-        vDebugSpewString("Got CMTI, reading messages...\r\n");
+        vDebugSpewString("[mdmc] Got CMTI, reading messages...\r\n");
         prvReadMessages();
     }
 }
@@ -340,7 +343,7 @@ static void prvModemStateInit(void)
     // flush shit...
     char Derp;
     while (xQueueReceive(xModemReceiveQueue, &Derp, 2000) != pdFALSE) {}
-    
+
     // Disable local echo
     prvModemSendLine("AT&F");
     prvModemReceiveUntil("\r", ReceiveBuffer, sizeof(ReceiveBuffer));
@@ -365,7 +368,7 @@ static void prvModemStateInit(void)
     vDebugSpewString(ReceiveBuffer);
     vDebugSpewString("\r\n");
     assert(!strncmp(ReceiveBuffer, "OK", 2));
-    
+
     prvModemSendLine("AT");
     prvModemReceiveUntil("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer));
     prvModemReceiveUntil("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer));
@@ -389,9 +392,9 @@ static void prvModemStateInit(void)
     // Enter main loop
     while (1)
     {
-        vDebugSpewString("Looping...\r\n");
+        vDebugSpewString("[mdmc] Looping...\r\n");
         prvModemReceiveUntil("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer));
-        vDebugSpewString("Got: ");
+        vDebugSpewString("[mdmc] Loop got: ");
         vDebugSpewString(ReceiveBuffer);
         vDebugSpewString("\r\n");
         prvHandleUnsolicited(ReceiveBuffer);
@@ -402,7 +405,7 @@ static void prvModemStateIdle(void)
 {
 
 }
-    
+
 void xModemCommunicationTask(void *Parameter)
 {
     (void) Parameter;

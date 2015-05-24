@@ -28,7 +28,7 @@ $(TARGET): $(EXECUTABLE)
 	$(CP) -O binary $^ $@
 
 OBJS = src/stm32f10x_it.o src/startup_stm32f10x_md.o \
-	src/project/main.o src/project/setup.o src/project/modem.o \
+	src/project/main.o src/project/setup.o src/project/modem.o src/project/control.o src/project/acceptor.o src/project/debug.o \
 	src/cmsis/core_cm3.o src/cmsis/system_stm32f10x.o \
 	src/project/newlib_stubs.o \
 	src/stdperiph/misc.o src/stdperiph/stm32f10x_gpio.o src/stdperiph/stm32f10x_rcc.o src/stdperiph/stm32f10x_usart.o \

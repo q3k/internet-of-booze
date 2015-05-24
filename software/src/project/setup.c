@@ -16,6 +16,10 @@ static void prvSetupRCC(void)
     // Enable IO clocks
     IO_MOTOR1_RCC_CMD(IO_MOTOR1_RCC, ENABLE);
     IO_MOTOR2_RCC_CMD(IO_MOTOR2_RCC, ENABLE);
+    IO_MOTOR2_RCC_CMD(IO_VEND1_RCC, ENABLE);
+    IO_MOTOR2_RCC_CMD(IO_VEND2_RCC, ENABLE);
+    IO_MOTOR2_RCC_CMD(IO_VEND3_RCC, ENABLE);
+    IO_MOTOR2_RCC_CMD(IO_VEND4_RCC, ENABLE);
 
     // USART3 Clock
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
@@ -29,12 +33,24 @@ static void prvSetupGPIO(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_SetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
 
     // MOTOR2 IO setup
     GPIO_InitStructure.GPIO_Pin = IO_MOTOR2_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    // VENDx IO setup
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStructure.GPIO_Pin = IO_VEND1_PIN;
+    GPIO_Init(IO_VEND1_PORT, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = IO_VEND2_PIN;
+    GPIO_Init(IO_VEND2_PORT, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = IO_VEND3_PIN;
+    GPIO_Init(IO_VEND3_PORT, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = IO_VEND4_PIN;
+    GPIO_Init(IO_VEND4_PORT, &GPIO_InitStructure);
 
     // USART3 Tx GPIO (PB10) setup
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
