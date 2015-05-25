@@ -4,7 +4,7 @@ build:
 	echo
 
 distfiles:
-	echo
+	mkdir -p distfiles
 
 test:
 	bash test.sh
