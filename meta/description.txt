@@ -1,3 +1,16 @@
-Task description ...
-IP: {{ip_address("task_name")}}
-[Download file]({{resource("libc.so.6")}})
+In A.D. 2015 prohibition was beginning.
+
+Vokda prices have risen to sky-high levels! Vending machines won't accept anything but 50PLN for a shot of booze - what an outrage!
+
+Our agents have acquired a [development]({{resource('photo-01.jpg')}})
+[prototype]({{resource('photo-02.jpg')}}) of one of these machines, and it's
+in transit to the Organizer's table. It should arrive there in a few hours for
+you to start experimenting with.
+
+While looking through related assets, our agents have also uncovered a
+[file]({{resource('main-prototype.elf')}}) that might be an earlier version of
+the firmware running on the device. The final dump will be available once the
+device appears on our premises. Can you find any hidden secrets or a way to
+make the machine dispense free alcohol? You won't be able to find any flags
+for now, but you can get a head start for what's to come when the system
+arrives...

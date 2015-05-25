@@ -1,13 +1,10 @@
 .PHONY = test distfiles build
 
 build:
-	cp task/flag.txt meta/flag.txt
-	mkdir -p resources
-	cp task/libc.so resources/
+	echo
 
 distfiles:
-	mkdir -p distfiles
-	cp task/* distfiles/
+	echo
 
 test:
 	bash test.sh
