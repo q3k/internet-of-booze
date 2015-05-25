@@ -1,16 +1,17 @@
-In A.D. 2015 prohibition was beginning.
-
-Vokda prices have risen to sky-high levels! Vending machines won't accept anything but 50PLN for a shot of booze - what an outrage!
+In A.D. 2015 prohibition was beginning. Vokda prices have risen to sky-high levels! Vending machines won't accept anything but 50PLN for a shot of booze - what an outrage!
 
 Our agents have acquired a [development]({{resource('photo-01.jpg')}})
-[prototype]({{resource('photo-02.jpg')}}) of one of these machines, and it's
-in transit to the Organizer's table. It should arrive there in a few hours for
-you to start experimenting with.
+[prototype]({{resource('photo-02.jpg')}}) of one of these machines, and it has
+been transported to the Organizer's table. 
 
-While looking through related assets, our agents have also uncovered a
-[file]({{resource('main-prototype.elf')}}) that might be an earlier version of
-the firmware running on the device. The final dump will be available once the
-device appears on our premises. Can you find any hidden secrets or a way to
-make the machine dispense free alcohol? You won't be able to find any flags
-for now, but you can get a head start for what's to come when the system
-arrives...
+**This challenge is in two parts, this is the first.** They are in logical
+order of solving, but feel free to solve them in whatever order you want.
+
+Our agents have noticed that the technician servicing these machines use an
+SMS interface to acquire information on the machine status, and the
+Manufacturer has been boasting that their cryptography protecting this
+endpoint is unbreakable. Can you break into it, and see the status of our
+machine?
+
+This [firmware dump]({{resource('main.elf')}}) is running at the organizers
+table. The phone number of the GSM modem is +48 500 803 730.
