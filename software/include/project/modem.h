@@ -8,5 +8,6 @@ void xModemCommunicationTask(void *Parameter);
 
 extern xQueueHandle xModemReceiveQueue;
 extern xQueueHandle xModemTransmitQueue;
+extern xQueueHandle xModemOutgoingSMSQueue;
 
 #endif

@@ -9,12 +9,15 @@
 
 #define PINCDZIESIOT 0b1101
 
+int iShotsSold = 0;
+
 void xVend(void)
 {
     vDebugSpewString("[acpt] Vending!\r\n");
-    GPIO_ResetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
-    vTaskDelay(15000);
+    iShotsSold++;
     GPIO_SetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
+    vTaskDelay(100);
+    GPIO_ResetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
 }
 
 void xAcceptorCommunicationTask(void *Parameter)

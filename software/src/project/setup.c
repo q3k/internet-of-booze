@@ -33,7 +33,7 @@ static void prvSetupGPIO(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
-    GPIO_SetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
+    GPIO_ResetBits(IO_MOTOR1_PORT, IO_MOTOR1_PIN);
 
     // MOTOR2 IO setup
     GPIO_InitStructure.GPIO_Pin = IO_MOTOR2_PIN;

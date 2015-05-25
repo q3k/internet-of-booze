@@ -4,13 +4,8 @@
 #include <stdint.h>
 
 typedef struct {
-    char Request[32];
-    uint32_t Identifier;
-} ModemRequest_TypeDef;
-
-typedef struct {
-    char Reply[256];
-    uint32_t Identifier;
-} ModemReply_TypeDef;
+    char Body[160];
+    char Recipient[16];
+} OutgoingSMS_TypeDef;
 
 #endif

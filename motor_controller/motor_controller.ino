@@ -22,6 +22,13 @@ void loop() {
   
   if (previous_state == 1 && state == 0)
   {
+    delay(50);
+    if (digitalRead(2) != state)
+    {
+      previous_state = state;
+      delay(1000);
+      return;
+    }
     // pulse condition
     digitalWrite(13, 1);
     digitalWrite(9, 1);

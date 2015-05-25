@@ -9,9 +9,11 @@
 
 #include "debug.h"
 #include "control.h"
+#include "modem_command.h"
 
 xQueueHandle xModemReceiveQueue;
 xQueueHandle xModemTransmitQueue;
+xQueueHandle xModemOutgoingSMSQueue;
 
 typedef enum {
     STATE_INIT = 0,
@@ -41,6 +43,16 @@ static void prvModemSendLine(const char *Line)
     prvModemFlush();
 }
 
+static void prvModemSendString(const char *Line)
+{
+    while (*Line != 0)
+    {
+        prvModemSendChar(*Line);
+        Line++;
+    }
+    prvModemFlush();
+}
+
 static char prvModemReceiveChar(void)
 {
     char Data;
@@ -58,13 +70,24 @@ static char prvModemReceiveCharTimeout(int32_t Timeout)
         return 0;
 }
 
-static void prvModemReceiveUntil(char *Part, char *Result, int ResultLen)
+static void prvModemReceiveUntilTimeout(char *Part, char *Result, int ResultLen, int Timeout)
 {
     char *PartOffset = Part;
     char *ResultOffset = Result;
     while (*PartOffset != 0)
     {
-        char Received = prvModemReceiveChar();
+        char Received;
+        if (Timeout == 0)
+            Received = prvModemReceiveChar();
+        else
+        {
+            Received = prvModemReceiveCharTimeout(Timeout);
+            if (Received == 0)
+            {
+                *Result = 0;
+                return;
+            }
+        }
 
         if (*PartOffset == Received)
         {
@@ -88,6 +111,11 @@ static void prvModemReceiveUntil(char *Part, char *Result, int ResultLen)
     uint32_t PartLen = strlen(Part);
     ResultOffset -= PartLen;
     *ResultOffset = 0;
+}
+
+static void prvModemReceiveUntil(char *Part, char *Result, int ResultLen)
+{
+    prvModemReceiveUntilTimeout(Part, Result, ResultLen, 0);
 }
 
 static void prvIssueCommand(const char *Command)
@@ -319,17 +347,26 @@ static void prvSendSMS(char *Destination, char *Message)
     (void) Message;
     vDebugSpewString("Starting to send message...\r\n");
     prvIssueCommand("AT+CMGF=1");
-    prvModemSendLine("AT+CMGS=\"+48792973702\"");
+    prvModemSendString("AT+CMGS=\"");
+    prvModemSendString(Destination);
+    prvModemSendLine("\"");
     char recv[128];
     prvModemReceiveUntil("> ", recv, sizeof(recv));
     vDebugSpewString("Received until: ");
     vDebugSpewString(recv);
     vDebugSpewString("\r\n");
     vDebugSpewString("Sending message body...\r\n");
-    prvModemSendLine("Fuck");
+    vDebugSpewString("Body is ");
+    vDebugSpewString(Message);
+    vDebugSpewString("\r\n");
+    prvModemSendLine(Message);
     prvModemSendLine("\x1a");
     prvIssueCommand("AT+CMGF=0");
+    prvIssueCommand("AT+CMGF=0");
+    prvIssueCommand("AT+CMGF=0");
 }
+
+OutgoingSMS_TypeDef OutgoingSMS;
 
 static void prvModemStateInit(void)
 {
@@ -393,11 +430,24 @@ static void prvModemStateInit(void)
     while (1)
     {
         vDebugSpewString("[mdmc] Looping...\r\n");
-        prvModemReceiveUntil("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer));
-        vDebugSpewString("[mdmc] Loop got: ");
-        vDebugSpewString(ReceiveBuffer);
-        vDebugSpewString("\r\n");
-        prvHandleUnsolicited(ReceiveBuffer);
+        prvModemReceiveUntilTimeout("\r\n", ReceiveBuffer, sizeof(ReceiveBuffer), 2000);
+        if (strlen(ReceiveBuffer) > 0)
+        {
+            vDebugSpewString("[mdmc] Loop got: ");
+            vDebugSpewString(ReceiveBuffer);
+            vDebugSpewString("\r\n");
+            prvHandleUnsolicited(ReceiveBuffer);
+        }
+        else
+            vDebugSpewString("[mdmc] No unsolicited lines from modem.");
+
+        while (xQueueReceive(xModemOutgoingSMSQueue, &OutgoingSMS, 100) == pdTRUE)
+        {
+            vDebugSpewString("[mdmc] Handling outgoing SMS request to ");
+            vDebugSpewString(OutgoingSMS.Recipient);
+            vDebugSpewString(".\r\n");
+            prvSendSMS(OutgoingSMS.Recipient, OutgoingSMS.Body);
+        }
     }
 }
 

@@ -9,6 +9,7 @@
 #include <sys/times.h>
 #include <sys/unistd.h>
 #include "stm32f10x_usart.h"
+#include "debug.h"
 
 
 #ifndef STDOUT_USART
@@ -140,6 +141,7 @@ int _lseek(int file, int ptr, int dir) {
  Malloc and related functions depend on this
  */
 int32_t _sbrk(int incr) {
+    vDebugSpewString("_sbrk happened, fucking newlib!\r\n");
     (void) incr;
     errno = ENOMEM;
     return (int32_t) -1;
