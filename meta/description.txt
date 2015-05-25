@@ -4,14 +4,10 @@ Our agents have acquired a [development]({{resource('photo-01.jpg')}})
 [prototype]({{resource('photo-02.jpg')}}) of one of these machines, and it has
 been transported to the Organizer's table. 
 
-**This challenge is in two parts, this is the first.** They are in logical
+**This challenge is in two parts, this is the second.** They are in logical
 order of solving, but feel free to solve them in whatever order you want.
 
-Our agents have noticed that the technician servicing these machines use an
-SMS interface to acquire information on the machine status, and the
-Manufacturer has been boasting that their cryptography protecting this
-endpoint is unbreakable. Can you break into it, and see the status of our
-machine?
+50zł for a shot of vodka is outrageous! Bring down the government! Free vodka
+for everyone? Why pay 50zł, when you can hack it and get it for free?
 
-This [firmware dump]({{resource('main.elf')}}) is running at the organizers
-table. The phone number of the GSM modem is +48 500 803 730.
+[This firmware]({{resource('main.elf')}}) is r
