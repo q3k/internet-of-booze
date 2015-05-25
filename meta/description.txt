@@ -7,8 +7,8 @@ been transported to the Organizer's table.
 **This challenge is in two parts, this is the second.** They are in logical
 order of solving, but feel free to solve them in whatever order you want.
 
-50zł for a shot of vodka is outrageous! Bring down the government! Free vodka
-for everyone? Why pay 50zł, when you can hack it and get it for free?
+50zl for a shot of vodka is outrageous! Bring down the government! Free vodka
+for everyone? Why pay 50zl, when you can hack it and get it for free?
 
 This [firmware dump]({{resource('main.elf')}}) is running at the organizers table. The phone number of the GSM modem is +48 500 803 730.
 
