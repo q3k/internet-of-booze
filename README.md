@@ -1,4 +1,4 @@
 Internet of Booze
 =================
 
-WIP
+It's a hardware task!
